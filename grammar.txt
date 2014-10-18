@@ -1,0 +1,67 @@
+
+# Examples of what we want to parse:
+
+* Various date Formats:
+
+12-12-14 (dd-mm-yy)  UK/AU - rest of the world?
+12/12/14 (dd-mm-yy)  UK/AU - rest of the world?
+12-12-14 (mm-dd-yy)  US - Use the locale to disambiguate
+12/12/14 (mm-dd-yy)  US - Use the locale to disambiguate
+
+21/12/2014  (yyyy/mm/dd)
+21-12-2014  (yyyy-mm-dd)
+
+ISO format etc
+
+* In words
+ 4th of July 2015
+ 4 Jul 2015
+ Jul 4 2015
+ July 1996
+ Jul 96
+
+ * Season
+ Summer of '69
+ Winter 50
+
+ * Named Days
+ New Year 2001
+
+ Anchored Time (time as a distance from some other time typically current time)
+ 5 days ago ( - 5 days)
+ now (+0)
+
+ last year ( - 1 year)
+ last month
+ last week
+ yesterday
+ last night (- <number of hours since morning> ) :: 12-hour duration?
+
+ next year
+ next month
+ next week
+ tomorrow next day
+ tomorrow night
+
+
+ - Ideas
+
+ * Explicit Duration
+    Eg: last 10 days, in the next hour, before next week, until next year, before christmas
+
+ * Implicit Duration - where duration is not explicitly specified but rather implied by its impreciseness
+    Eg: today (24-hour ??), this afternoon (12:01 till 5:00?), tonite (from dusk till dawn)
+
+ * Point in Time (DatePoints)
+
+ * Formal Date/Time - various date/time formats
+ * Formal Duration - From Date/Time to Date/time
+ * Period (weeks days months year) - no date point implied
+    4 weeks, 5 years
+
+Plan of attack:
+
+* First assume only date points (no durations or periods or multiple dates)
+* Assume granularity
+ - day (for dates like last year)
+ - hour/minute (for within day like tonite, morning, evening)
