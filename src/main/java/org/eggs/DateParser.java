@@ -1,5 +1,6 @@
 package org.eggs;
 
+import org.eggs.nodes.Month;
 import org.eggs.nodes.Node;
 import org.eggs.nodes.NodeFactory;
 import org.parboiled.BaseParser;
@@ -87,52 +88,58 @@ public class DateParser extends BaseParser<Node> {
         );
     }
     // March 2001
-    Rule XXMonthNameYear() {
-        return Sequence(MonthName(), FourDigitYearOrdinal());
-    }
-
     Rule MonthNameYear() {
         return Sequence(
                 Sequence(MonthName(), FourDigitYearOrdinal()),
-                push(nodeFactory.monthYear(pop(), pop()))
+                push(nodeFactory.monthYear(pop(1), pop()))
         );
     }
 
     // Feb, mar, December
-//    Rule MonthName() {
-//        return Sequence(
-//                FirstOf(nodeFactory.monthNameMatcher()),
-//                push(nodeFactory.monthName(match()))
-//        );
-//    }
-
     Rule MonthName() {
         return Sequence(
-                FirstOf(
-                        "january", "jan",
-                        "february", "feb",
-                        "march", "mar",
-                        "april", "apr",
-                        "may",
-                        "june", "jun",
-                        "july", "jul",
-                        "august", "aug",
-                        "september", "sep",
-                        "october", "oct",
-                        "november", "nov",
-                        "december", "dec"
-                ),
+                MonthNames(),
+//                FirstOf(Month.matchers()),
                 push(nodeFactory.monthName(match()))
         );
     }
 
-//    //mon, tue, saturday
-//    Rule DayName() {
-//        return Sequence(
+    Rule MonthNames() {
+        return FirstOf(
+                "january ", "jan ",
+                "february ", "feb ",
+                "march ", "mar ",
+                "april ", "apr ",
+                "may ",
+                "june ", "jun ",
+                "july ", "jul ",
+                "august ", "aug ",
+                "september ", "sep ",
+                "october ", "oct ",
+                "november ", "nov ",
+                "december ", "dec "
+        );
+    }
+
+    //mon, tue, saturday
+    Rule DayName() {
+        return Sequence(
+                DayOfTheWeekNames(),
 //                FirstOf(nodeFactory.dayNameMatcher()),
-//                push(nodeFactory.dayName(match()))
-//        );
-//    }
+                push(nodeFactory.dayName(match()))
+        );
+    }
+
+    Rule DayOfTheWeekNames() {
+        return FirstOf(
+                "monday ", "mon ",
+                "tuesday ", "tue ",
+                "wednesday ", "wed ",
+                "thursday ", "thu ",
+                "friday ", "fri",
+                "saturday ", "sat "
+        );
+    }
 
     Rule DateFieldSeparator() {
         return FirstOf("- ", "/ ");
@@ -170,7 +177,7 @@ public class DateParser extends BaseParser<Node> {
     @SuppressSubnodes
     Rule TwoDigitYearOrdinal() {
         return Sequence(
-                Digit(), Digit(),
+                Sequence(Digit(), Digit()),
                 push(nodeFactory.twoDigitYear(matchOrDefault("0")))
         );
     }

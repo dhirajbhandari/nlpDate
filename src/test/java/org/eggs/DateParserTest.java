@@ -29,17 +29,19 @@ public class DateParserTest {
     @Test
     public void testFormalDate() throws Exception {
         checkDateExpression("16/05/2009", date(2009, 5, 16));
-        checkDateExpression("16/05/09", date(2009, 5, 16));
         checkDateExpression("16-05-2009", date(2009, 5, 16));
-        checkDateExpression("16-05-09", date(2009, 5, 16));
     }
 
     @Test
     public void testLooseFormalDate() throws Exception {
-        checkDateExpression("6/5/2009", date(2009, 5, 6));
         checkDateExpression("6/5/09", date(2009, 5, 6));
-        checkDateExpression("6-5-2009", date(2009, 5, 6));
         checkDateExpression("6-5-09", date(2009, 5, 6));
+    }
+
+    @Test
+    public void testMonthNameYear() throws Exception {
+        checkDateExpression("mar 2009", date(2009, 3, 1));
+        checkDateExpression("december 2020", date(2020, 12, 1));
     }
 
     @Test
