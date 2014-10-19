@@ -37,11 +37,6 @@ public class Month extends NamedValue<Month.MonthName> {
     public Month(String text) {
         super(NodeType.MONTH_NAMED, text);
         this.month = find(MonthName.values(), text);
-        System.out.println("Matchers");
-        for(String s : Month.matchers()) {
-            System.out.println("[" + s + "]");
-        }
-//            System.out.println(Month.matchers());
     }
 
     public Integer intValue() {
