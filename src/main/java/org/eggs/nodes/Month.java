@@ -3,9 +3,9 @@ package org.eggs.nodes;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Month extends NamedValue<Month.MonthName> {
+public class Month extends NamedValue<Month.Name> {
 
-    public enum MonthName {
+    enum Name {
         JAN(1, "january"),
         FEB(2, "february"),
         MAR(3, "march"),
@@ -22,7 +22,7 @@ public class Month extends NamedValue<Month.MonthName> {
         private final Integer value;
         private final String fullName;
 
-        private MonthName(Integer value, String fullName) {
+        private Name(Integer value, String fullName) {
             this.value = value;
             this.fullName = fullName;
         }
@@ -32,26 +32,26 @@ public class Month extends NamedValue<Month.MonthName> {
         }
     }
 
-    private MonthName month;
+    private Name month;
 
     public Month(String text) {
         super(NodeType.MONTH_NAMED, text);
-        this.month = find(MonthName.values(), text);
+        this.month = find(Name.values(), text);
     }
 
     public Integer intValue() {
         return month.getValue();
     }
 
-    public MonthName value() {
+    public Name value() {
         return month;
     }
 
     public static String[] matchers() {
         Set<String> regexs = new HashSet<String>();
-        for (MonthName monthName : MonthName.values()) {
-            regexs.add(monthName.fullName.toLowerCase() + " ");
-            regexs.add(monthName.name().toLowerCase() + " ");
+        for (Name name : Name.values()) {
+            regexs.add(name.fullName.toLowerCase() + " ");
+            regexs.add(name.name().toLowerCase() + " ");
         }
         return regexs.toArray(new String[regexs.size()]);
     }

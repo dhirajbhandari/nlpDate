@@ -1,5 +1,6 @@
 package examples;
 
+import org.eggs.Logger;
 import org.parboiled.BaseParser;
 import org.parboiled.Parboiled;
 import org.parboiled.Rule;
@@ -18,6 +19,8 @@ import static org.parboiled.trees.GraphUtils.printTree;
 
 public abstract class CalculatorParser<V> extends BaseParser<V> {
 
+    private static Logger LOG = Logger.getLogger(CalculatorParser.class);
+    
     public abstract Rule InputLine();
 
     @SuppressWarnings({"unchecked"})
@@ -25,14 +28,14 @@ public abstract class CalculatorParser<V> extends BaseParser<V> {
         CalculatorParser<V> parser = Parboiled.createParser(parserClass);
 
         while (true) {
-            System.out.print("Enter a calculators expression (single RETURN to exit)!\n");
+            LOG.debug("Enter a calculators expression (single RETURN to exit)!\n");
             String input = new Scanner(System.in).nextLine();
             if (StringUtils.isEmpty(input)) break;
 
             ParsingResult<?> result = new RecoveringParseRunner(parser.InputLine()).run(input);
 
             if (result.hasErrors()) {
-                System.out.println("\nParse Errors:\n" + printParseErrors(result));
+                LOG.debug("\nParse Errors:\n" + printParseErrors(result));
             }
 
             Object value = result.parseTreeRoot.getValue();
@@ -40,13 +43,13 @@ public abstract class CalculatorParser<V> extends BaseParser<V> {
                 String str = value.toString();
                 int ix = str.indexOf('|');
                 if (ix >= 0) str = str.substring(ix + 2); // extract value part of AST node toString()
-                System.out.println(input + " = " + str + '\n');
+                LOG.debug(input + " = " + str + '\n');
             }
             if (value instanceof GraphNode) {
-                System.out.println("\nAbstract Syntax Tree:\n" +
+                LOG.debug("\nAbstract Syntax Tree:\n" +
                         printTree((GraphNode) value, new ToStringFormatter(null)) + '\n');
             } else {
-                System.out.println("\nParse Tree:\n" + printNodeTree(result) + '\n');
+                LOG.debug("\nParse Tree:\n" + printNodeTree(result) + '\n');
             }
         }
     }

@@ -1,5 +1,7 @@
 package org.eggs.nodes;
 
+import static org.eggs.Logger.LOG;
+
 public class Value extends Node {
 
     private String text;
@@ -14,7 +16,7 @@ public class Value extends Node {
         if (NodeType.TWO_DIGIT_YEAR.equals(getNodeType()))  {
             val = val + 2000; //current century
         }
-        System.out.printf("raw text: %s value: %d", text, val);
+        LOG.debug("raw text: %s value: %d", text, val);
         return val;
     }
 }

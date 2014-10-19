@@ -1,6 +1,7 @@
 package examples;
 
 import examples.CalculatorParser0;
+import org.eggs.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.parboiled.Parboiled;
@@ -13,6 +14,8 @@ import static org.parboiled.support.ParseTreeUtils.printNodeTree;
 
 public class CalculatorParser0Test {
 
+    private static Logger LOG = Logger.getLogger(CalculatorParser0Test.class);
+    
     private CalculatorParser0 parser;
 
     @Before
@@ -25,8 +28,8 @@ public class CalculatorParser0Test {
         String input = "3 + (75/5) * 5";
         ParsingResult<?> result = new RecoveringParseRunner(
                 parser.Expression()).run(input);
-        System.out.println(input + " = " + result.parseTreeRoot.getValue() + '\n');
-        System.out.println(printNodeTree(result));
+        LOG.debug(input + " = " + result.parseTreeRoot.getValue() + '\n');
+        LOG.debug(printNodeTree(result));
 
         assertThat(result, notNullValue());
     }

@@ -1,7 +1,6 @@
 package examples;
 
-import examples.CalcNode;
-import examples.CalculatorParser4;
+import org.eggs.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,6 +15,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.parboiled.support.ParseTreeUtils.printNodeTree;
 
 public class CalculatorParser4Test {
+
+    private static Logger LOG = Logger.getLogger(CalculatorParser4Test.class);
 
     private CalculatorParser4 parser;
 
@@ -103,13 +104,13 @@ public class CalculatorParser4Test {
     protected void checkExpression(String input, Double expected) throws Exception {
         RecoveringParseRunner runner = new RecoveringParseRunner(parser.Expression());
         ParsingResult<CalcNode> result = runner.run(input);
-        System.out.println(input + " = " + result.parseTreeRoot.getValue() + '\n');
-        System.out.println(printNodeTree(result));
+        LOG.debug(input + " = " + result.parseTreeRoot.getValue() + '\n');
+        LOG.debug(printNodeTree(result));
 
         assertThat(result, notNullValue());
 
         Node<CalcNode> parseTreeRoot = result.parseTreeRoot;
-        System.out.println("node class: " + parseTreeRoot.getClass());
+        LOG.debug("node class: " + parseTreeRoot.getClass());
         CalcNode value = parseTreeRoot.getValue();
         assertThat(value.doubleValue(), equalTo(expected));
     }

@@ -1,16 +1,8 @@
 package examples;
 
-import org.parboiled.Parboiled;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
 import org.parboiled.annotations.SuppressSubnodes;
-import org.parboiled.common.StringUtils;
-import org.parboiled.parserunners.RecoveringParseRunner;
-import org.parboiled.support.ParsingResult;
-
-import java.util.Scanner;
-
-import static org.parboiled.support.ParseTreeUtils.printNodeTree;
 
 
 @BuildParseTree
@@ -80,23 +72,4 @@ public class CalculatorParser1 extends CalculatorParser<Integer> {
         main(CalculatorParser1.class);
     }
 
-
-    public static void mainXXX(String[] args) {
-        CalculatorParser1 parser = Parboiled.createParser(CalculatorParser1.class);
-        while (true) {
-            System.out.print("Enter an expression (3 + 5, single RETURN to exit)!\n");
-            String input = new Scanner(System.in).nextLine();
-            if (StringUtils.isEmpty(input)) break;
-
-            ParsingResult<?> result = new RecoveringParseRunner(parser.Expression()).run(input);
-
-            System.out.println(input + " = " + result.parseTreeRoot.getValue() + '\n');
-            System.out.println(printNodeTree(result) + '\n');
-
-            if (!result.matched) {
-                System.out.println(StringUtils.join(result.parseErrors, "---\n"));
-            }
-        }
-
-    }
 }

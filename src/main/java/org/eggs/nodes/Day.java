@@ -3,9 +3,9 @@ package org.eggs.nodes;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Day extends NamedValue<Day.DayName> {
+public class Day extends NamedValue<Day.Name> {
 
-    public enum DayName {
+    enum Name {
         MON(1, "monday"),
         TUE(2, "tuesday"),
         WED(3, "wednesday"),
@@ -17,7 +17,7 @@ public class Day extends NamedValue<Day.DayName> {
         private final Integer value;
         private final String fullName;
 
-        private DayName(Integer value, String fullName) {
+        private Name(Integer value, String fullName) {
             this.value = value;
             this.fullName = fullName;
         }
@@ -27,24 +27,24 @@ public class Day extends NamedValue<Day.DayName> {
         }
     }
 
-    private DayName day;
+    private Name day;
 
     public Day(String text) {
         super(NodeType.DAY_OF_THE_WEEK_NAMED, text);
-        this.day = find(DayName.values(), text);
+        this.day = find(Name.values(), text);
     }
 
     public Integer intValue() {
         return day.getValue();
     }
 
-    public DayName value() {
+    public Name value() {
         return day;
     }
 
     public static String[] matchers() {
         Set<String> regexs = new HashSet<String>();
-        for(DayName day: DayName.values()) {
+        for(Name day: Name.values()) {
             regexs.add(day.fullName.toLowerCase());
             regexs.add(day.name().toLowerCase());
         }

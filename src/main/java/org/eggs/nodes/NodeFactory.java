@@ -3,6 +3,9 @@ package org.eggs.nodes;
 import org.eggs.DateDistance;
 import org.eggs.ParsingContext;
 
+/**
+ * Builder for Creating Nodes from the Parser
+ */
 public class NodeFactory {
 
     private final ParsingContext parsingContext;
@@ -11,17 +14,12 @@ public class NodeFactory {
         this.parsingContext = parsingContext;
     }
 
-    /**
-     * Builders for Creating DateNode from the Parser
-     * @param matchedText
-     * @return
-     */
     public Node twoDigitYear(String matchedText) {
-        return new Value(NodeType.TWO_DIGIT_YEAR, matchedText);
+        return new Year(NodeType.TWO_DIGIT_YEAR, matchedText);
     }
 
     public Node fourDigitYear(CharSequence matchedText) {
-        return new Value(NodeType.FOUR_DIGIT_YEAR, matchedText.toString());
+        return new Year(NodeType.FOUR_DIGIT_YEAR, matchedText.toString());
     }
 
     public Node monthOrdinal(String matchedText) {
@@ -55,14 +53,6 @@ public class NodeFactory {
 
     public Node dayName(String dayStr) {
         return new Day(dayStr);
-    }
-
-    public static String[] monthNameMatcher() {
-        return Month.matchers();
-    }
-
-    public static String[] dayNameMatcher() {
-        return Day.matchers();
     }
 
     public Node monthYear(Node monthName, Node fourDigitYear) {

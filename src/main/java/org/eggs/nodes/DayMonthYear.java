@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 
 import java.util.Arrays;
 
+import static org.eggs.Logger.LOG;
+
 public class DayMonthYear extends Node {
 
     private final Value year;
@@ -19,7 +21,7 @@ public class DayMonthYear extends Node {
 
     @Override
     public DateTime getDate() {
-        System.out.printf("Values: year: %s, month: %s, day: %s", year.intValue(), month.intValue(), date.intValue());
+        LOG.debug("Values: year: %s, month: %s, day: %s", year.intValue(), month.intValue(), date.intValue());
         return new DateTime(year.intValue(), month.intValue(), date.intValue(), 0, 0, 0);
     }
 }
