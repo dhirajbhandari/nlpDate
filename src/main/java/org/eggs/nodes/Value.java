@@ -12,6 +12,7 @@ public class Value extends Node {
     }
 
     public Integer intValue() {
+        LOG.debug("Value#<@text: %s>.intValue()\n", text);
         Integer val = Integer.parseInt(text);
         if (NodeType.TWO_DIGIT_YEAR.equals(getNodeType()))  {
             val = val + 2000; //current century

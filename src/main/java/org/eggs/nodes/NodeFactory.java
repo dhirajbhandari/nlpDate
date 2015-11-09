@@ -27,7 +27,8 @@ public class NodeFactory {
     }
 
     public Node dayOfTheMonthOrdinal(String text) {
-        return new Value(NodeType.DAY_OF_THE_MONTH, text);
+        //System.out.println("dayOfTheMonthOrdinal(text:" + text);
+        return new Value(NodeType.DAY_OF_THE_MONTH, removeMonthSuffix(text.toString()));
     }
 
     public Node formalDate(Node year, Node month, Node date) {
@@ -65,5 +66,9 @@ public class NodeFactory {
 
     public Node monthDate(Node monthName, Node dateOrdinal) {
         return new DayMonth(parsingContext, monthName, dateOrdinal);
+    }
+
+    public String removeMonthSuffix(String text) {
+        return text.replaceAll("(st|nd|rd|th)","");
     }
 }
