@@ -34,6 +34,10 @@ public class NodeFactory {
         return new DayMonthYear(null, year, month, date);
     }
 
+    public Node yearMonthDate(Node year, Node month, Node date) {
+        return new DayMonthYear(null, year, month, date);
+    }
+
     public Node relativeDatePoint(String pointer, String unit) {
         return new RelativeDate(parsingContext, DateDistance.parse(pointer, unit));
     }
@@ -57,5 +61,9 @@ public class NodeFactory {
 
     public Node monthYear(Node monthName, Node fourDigitYear) {
         return new MonthYear(fourDigitYear, monthName);
+    }
+
+    public Node monthDate(Node monthName, Node dateOrdinal) {
+        return new DayMonth(parsingContext, monthName, dateOrdinal);
     }
 }

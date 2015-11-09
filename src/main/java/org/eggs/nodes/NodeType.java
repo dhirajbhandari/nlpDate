@@ -8,6 +8,7 @@ public enum NodeType {
     DAY_OF_THE_MONTH,
     DAY_OF_THE_WEEK_NAMED,
     RELATIVE_DATE,
+    DAY_MONTH,
     MONTH_YEAR,
     DAY_MONTH_YEAR,
 }

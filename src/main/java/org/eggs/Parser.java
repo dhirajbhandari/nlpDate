@@ -7,6 +7,7 @@ import org.parboiled.support.ParsingResult;
 import org.parboiled.support.ToStringFormatter;
 import org.parboiled.trees.GraphNode;
 
+import java.io.Console;
 import java.util.Scanner;
 
 import static org.parboiled.errors.ErrorUtils.printParseErrors;
@@ -18,6 +19,7 @@ import static org.parboiled.trees.GraphUtils.printTree;
  */
 public class Parser {
     public static void main(String[] args) {
+        println("Starting Parser");
         main(DateParser.class);
     }
 
@@ -50,5 +52,9 @@ public class Parser {
                 System.out.println("\nParse Tree:\n" + printNodeTree(result) + '\n');
             }
         }
+    }
+
+    private static void println(String s) {
+        System.out.println(s);
     }
 }

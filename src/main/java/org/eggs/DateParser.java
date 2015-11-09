@@ -1,6 +1,5 @@
 package org.eggs;
 
-import org.eggs.nodes.Month;
 import org.eggs.nodes.Node;
 import org.eggs.nodes.NodeFactory;
 import org.parboiled.BaseParser;
@@ -76,18 +75,30 @@ public class DateParser extends BaseParser<Node> {
     }
 
     Rule FixedDatePoint() {
-        return FirstOf(FormalDatePoint(), MonthNameYear());
+        return FirstOf(FullDayMonthYearDatePoint(), MonthNameYear());
     }
 
-    Rule FormalDatePoint() {
-        return Sequence(
-                DateOrdinal(), DateFieldSeparator(),
-                MonthOrdinal(), DateFieldSeparator(),
-                FirstOf(FourDigitYearOrdinal(), TwoDigitYearOrdinal()),
-                push(nodeFactory.formalDate(pop(), pop(), pop()))
+    Rule FullDayMonthYearDatePoint() {
+        return FirstOf(
+                Sequence( // "14-01-2014", "14/01/2014", "14/01/14"
+                        DateOrdinal(), DateFieldSeparator(),
+                        MonthOrdinal(), DateFieldSeparator(),
+                        FirstOf(FourDigitYearOrdinal(), TwoDigitYearOrdinal()),
+                        push(nodeFactory.yearMonthDate(pop(), pop(), pop()))
+                ),
+                Sequence(  // "february 14, 2004",  "14 feb, 2004"
+                        Sequence(DayAndMonth(), FourDigitYearOrdinal()),
+                        push(nodeFactory.yearMonthDate(pop(), pop(), pop()))
+                ),
+                Sequence(  // "may 27th 2014", 1st Jan 2011
+                        Sequence(DayAndMonth(), FourDigitYearOrdinal()),
+                        push(nodeFactory.yearMonthDate(pop(), pop(), pop()))
+                )
+
         );
     }
-    // March 2001
+
+    // "March 2001", "Feb 2009"
     Rule MonthNameYear() {
         return Sequence(
                 Sequence(MonthName(), FourDigitYearOrdinal()),
@@ -95,12 +106,32 @@ public class DateParser extends BaseParser<Node> {
         );
     }
 
-    // Feb, mar, December
+
+    // "Feb", "mar", "December"
     Rule MonthName() {
         return Sequence(
                 MonthNames(),
 //                FirstOf(Month.matchers()),
                 push(nodeFactory.monthName(match()))
+        );
+    }
+
+    /**
+     *
+     * "14 February", "February 14", "may 27th 2014", 1st Jan 2011
+     * puts 2 nodes on stack with month on top like so:
+     * <pre>
+     *         [Top ------------------ Bottom]
+     *         [Month, DateOrdinal           ]
+     * </pre>
+     */
+    Rule DayAndMonth() {
+        return FirstOf(
+                Sequence(
+                        Sequence(MonthName(), OptWhiteSpace(), DateOrdinal(), Optional(','), OptWhiteSpace()),
+                        pushAll(pop(), pop()) //push it back as (month(top), date(top-1)
+                ),
+                Sequence(DateOrdinal(), WhiteSpace(), MonthName(), Optional(','), OptWhiteSpace())
         );
     }
 
@@ -195,13 +226,31 @@ public class DateParser extends BaseParser<Node> {
     }
 
     // Matches DayOfTheMonth (01 - 31)
+    // todo: "1st", "2nd", "3rd", "4th", "23rd", "31st"
+//    @SuppressSubnodes
+//    Rule DateOrdinal() {
+//        return Sequence(
+//                FirstOf(
+//                        Sequence(CharRange('1', '2'), Digit()),
+//                        Sequence('3', CharRange('0', '1')),
+//                        Sequence(Optional('0'), NonZeroDigit())
+//                ),
+//                push(nodeFactory.dayOfTheMonthOrdinal(matchOrDefault("0")))
+//        );
+//    }
+
     @SuppressSubnodes
     Rule DateOrdinal() {
         return Sequence(
                 FirstOf(
-                        Sequence(CharRange('1', '2'), Digit()),
-                        Sequence('3', CharRange('0', '1')),
-                        Sequence(Optional('0'), NonZeroDigit())
+                        Sequence(FirstOf('1', "21", "31"), Optional("st")),
+                        Sequence(FirstOf('2', "22"), Optional("nd")),
+                        Sequence(FirstOf('3', "23"), Optional("rd")),
+                        Sequence(CharRange('4', '9'), Optional("th")),
+                        Sequence('1', Digit(), Optional("th")),
+                        Sequence(FirstOf("20", "30"), Optional("th")),
+                        Sequence('2', CharRange('4', '9'), Optional("th")),
+                        Sequence('0', NonZeroDigit())
                 ),
                 push(nodeFactory.dayOfTheMonthOrdinal(matchOrDefault("0")))
         );
@@ -252,4 +301,3 @@ public class DateParser extends BaseParser<Node> {
 //        );
 //    }
 }
-
