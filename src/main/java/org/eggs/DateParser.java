@@ -243,13 +243,13 @@ public class DateParser extends BaseParser<Node> {
     Rule DateOrdinal() {
         return Sequence(
                 FirstOf(
-                        Sequence(FirstOf('1', "21", "31"), Optional("st")),
-                        Sequence(FirstOf('2', "22"), Optional("nd")),
-                        Sequence(FirstOf('3', "23"), Optional("rd")),
-                        Sequence(CharRange('4', '9'), Optional("th")),
-                        Sequence('1', Digit(), Optional("th")),
+                        Sequence('1', Digit(), Optional("th")), // try to match the 2-digit dates first
+                        Sequence('2', CharRange('4', '9'), Optional("th")), //try to match 2-digit date first
                         Sequence(FirstOf("20", "30"), Optional("th")),
-                        Sequence('2', CharRange('4', '9'), Optional("th")),
+                        Sequence(FirstOf("21", "31", "1"), Optional("st")),
+                        Sequence(FirstOf("22", "2"), Optional("nd")),
+                        Sequence(FirstOf("23", "3"), Optional("rd")),
+                        Sequence(CharRange('4', '9'), Optional("th")),
                         Sequence('0', NonZeroDigit())
                 ),
                 push(nodeFactory.dayOfTheMonthOrdinal(matchOrDefault("0")))

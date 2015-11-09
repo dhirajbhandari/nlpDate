@@ -6,7 +6,7 @@ public class DayMonthYearTest extends DateParserTestCase {
 
     @Test
     public void testFormalDate() throws Exception {
-        validateDateExpression("26/05/2009", date(2009, 5, 20));
+        validateDateExpression("26/05/2009", date(2009, 5, 26));
         validateDateExpression("16/05/2009", date(2009, 5, 16));
         validateDateExpression("16-05-2009", date(2009, 5, 16));
     }
