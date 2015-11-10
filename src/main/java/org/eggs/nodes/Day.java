@@ -17,7 +17,7 @@ public class Day extends NamedValue<Day.Name> {
         private final Integer value;
         private final String fullName;
 
-        private Name(Integer value, String fullName) {
+        Name(Integer value, String fullName) {
             this.value = value;
             this.fullName = fullName;
         }
