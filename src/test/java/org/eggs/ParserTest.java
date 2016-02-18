@@ -1,5 +1,7 @@
 package org.eggs;
 
+import org.eggs.nodes.Node;
+import org.joda.time.DateTime;
 import org.parboiled.Parboiled;
 import org.parboiled.common.StringUtils;
 import org.parboiled.parserunners.RecoveringParseRunner;
@@ -7,7 +9,9 @@ import org.parboiled.support.ParsingResult;
 import org.parboiled.support.ToStringFormatter;
 import org.parboiled.trees.GraphNode;
 
-import java.io.Console;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.parboiled.errors.ErrorUtils.printParseErrors;
@@ -18,9 +22,35 @@ import static org.parboiled.trees.GraphUtils.printTree;
  * Main Entry Point to the ParserTest
  */
 public class ParserTest {
+    private static final String WORKING_INPUT_FILE_NAME = "working_dates.txt";
     public static void main(String[] args) {
         println("Starting ParserTest");
-        main(DateParser.class);
+        new ParserTest().run();
+    }
+
+    public void run() {
+       Parser dateParser = new Parser();
+       for(String input : readFromFile()) {
+           ParsingResult<Node> result = dateParser.parse(input);
+           if (result.resultValue != null) {
+               System.out.printf("input: '%s' output: %s\n", input, result.resultValue.getDate());
+           } else {
+               System.out.printf("FAILED with input: '%s'\n", input);
+           }
+       }
+    }
+
+    private List<String> readFromFile() {
+        try {
+            InputStream is = this.getClass().getResourceAsStream(WORKING_INPUT_FILE_NAME);
+            System.out.printf("xxxx: %s", is);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(WORKING_INPUT_FILE_NAME)));
+            List<String> inputs = new ArrayList<>();
+            inputs.add(reader.readLine().replace("\n", ""));
+            return inputs;
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @SuppressWarnings({"unchecked"})
