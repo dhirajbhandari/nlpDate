@@ -1,9 +1,9 @@
 # nlpDate
 natural date parser library for Java written using parboiled
 
-
 #Using
-<code>
+
+```
 String input = System.console().readLine("> ");
 DateTime date = new Parser().parseDate(input);
 
@@ -12,9 +12,7 @@ if (date!= null) {
 } else {
    System.out.printf("FAILED to parse input: %s\n", input);
 }
-</code>
-
-
+```
 
 #Building
 
